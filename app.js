@@ -1,7 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const { idValidator, bodyValidator } = require("./helpers/validators");
+const { idValidator } = require("./helpers/validators");
 
 const contactsRouter = require("./routes/api/contacts");
 
@@ -15,9 +15,6 @@ app.use(express.json());
 
 // Validator for id in request
 app.use(idValidator);
-
-// Validator for body
-// app.use(bodyValidator);
 
 app.use("/api/contacts", contactsRouter);
 
