@@ -1,78 +1,32 @@
 const express = require("express");
-const Joi = require("joi");
-const shortid = require("shortid");
+
 const {
-  listContacts,
-  getContactById,
   addContact,
-  removeContact,
-  updateContact,
-} = require("../../models/contacts");
+  deleteContact,
+  editContact,
+  getAllContacts,
+  getOneContactById,
+  toggleContact,
+} = require("../../controllers");
 
 const router = express.Router();
 
 // Get list of all contacts
-router.get("/", async (req, res, next) => {
-  const contacts = await listContacts();
-  res.status(200).json({ data: contacts });
-});
+router.get("/", getAllContacts);
 
 // Get one particular contact with id = contactId
-router.get("/:contactId", async (req, res, next) => {
-  const id = req.params.contactId;
-  const contact = await getContactById(id);
-  contact
-    ? res.json({ data: contact })
-    : res.status(404).json({ message: "Not found" });
-});
+router.get("/:contactId", getOneContactById);
 
 // Add one contact
-router.post("/", async (req, res, next) => {
-  const contact = req.body;
-  const contactSchema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().required(),
-    phone: Joi.string().required(),
-  });
-  const { value, error } = contactSchema.validate(contact);
-
-  if (error) {
-    res.status(400).json({ message: error.message });
-  } else {
-    value.id = shortid.generate();
-    const contact = await addContact(value);
-    res.status(201).json({ data: contact });
-  }
-});
+router.post("/", addContact);
 
 //  Delete one particular contact with id = contactId
-router.delete("/:contactId", async (req, res, next) => {
-  const id = req.params.contactId;
-  (await removeContact(id))
-    ? res.status(200).json({ message: "contact deleted" })
-    : res.status(404).json({ message: "Not found" });
+router.delete("/:contactId", deleteContact);
 
-  // res.json({ message: "template message" });
-});
+// Edit one particular contact with id = contactId
+router.put("/:contactId", editContact);
 
-router.put("/:contactId", async (req, res, next) => {
-  const id = req.params.contactId;
-  const contact = req.body;
-  const contactSchema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().required(),
-    phone: Joi.string().required(),
-  });
-  const { value, error } = contactSchema.validate(contact);
-
-  if (!contact || error) {
-    res.status(400).json({ message: "missing fields" });
-  } else {
-    const result = await updateContact(id, value);
-    result
-      ? res.status(200).json({ data: result })
-      : res.status(404).json({ message: "Not found" });
-  }
-});
+// Update one particular contact with id = contactId, toggle favorite
+router.patch("/:contactId/favorite", toggleContact);
 
 module.exports = router;
