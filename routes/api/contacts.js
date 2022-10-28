@@ -1,5 +1,5 @@
 const express = require("express");
-
+const validateToken = require("../../middlewares/validateToken");
 const {
   addContact,
   deleteContact,
@@ -7,9 +7,12 @@ const {
   getAllContacts,
   getOneContactById,
   toggleContact,
-} = require("../../controllers");
+} = require("../../controllers/contacts");
 
 const router = express.Router();
+
+// Validate token
+router.use(validateToken);
 
 // Get list of all contacts
 router.get("/", getAllContacts);

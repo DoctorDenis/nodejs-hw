@@ -2,8 +2,12 @@ const { contactModel } = require("../models/contact");
 const { bodyValidator } = require("../helpers/validators");
 
 // Done
-const listContacts = async () => {
-  return await contactModel.find({});
+const listContacts = async (params) => {
+  if (params) {
+    return await contactModel.find(params);
+  } else {
+    return await contactModel.find({});
+  }
 };
 
 // Done
