@@ -1,4 +1,4 @@
-const { updateStatusContact } = require("../services/contactService");
+const { updateStatusContact } = require("../../services/contactService");
 
 async function toggleContact(req, res, next) {
   const id = req.params.contactId;

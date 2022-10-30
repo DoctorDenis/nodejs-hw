@@ -1,4 +1,4 @@
-const { addContact } = require("../services/contactService");
+const { addContact } = require("../../services/contactService");
 
 async function postContact(req, res, next) {
   const body = req.body;
