@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
+  name: String,
   password: {
     type: String,
     required: [true, "Provide password for user"],
@@ -20,6 +21,7 @@ const userSchema = new mongoose.Schema({
     default: "starter",
   },
   token: String,
+  avatarURL: String,
 });
 
 const userModel = mongoose.model("users", userSchema);

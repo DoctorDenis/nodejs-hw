@@ -1,5 +1,4 @@
 const userService = require("../../services/userService");
-// const jwt = require("jsonwebtoken");
 
 async function current(req, res, next) {
   try {

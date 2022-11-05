@@ -54,4 +54,23 @@ module.exports = class userService {
       return user;
     }
   }
+
+  static async changeAvatar(body) {
+    const user = await userModel.findOneAndUpdate(
+      { _id: body._id },
+      {
+        $set: { avatarURL: body.avatarURL },
+      },
+      {
+        returnDocument: "after",
+        runValidators: true,
+      }
+    );
+
+    if (!user) {
+      throw new Error("Not found");
+    } else {
+      return user;
+    }
+  }
 };
