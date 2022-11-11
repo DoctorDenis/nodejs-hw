@@ -4,7 +4,10 @@ const login = require("../../controllers/users/login");
 const logout = require("../../controllers/users/logout");
 const current = require("../../controllers/users/current");
 const change = require("../../controllers/users/change");
+const verify = require("../../controllers/users/verify");
+const reverify = require("../../controllers/users/reverify");
 const multer = require("multer");
+const validateEmail = require("../../middlewares/validateEmail");
 const path = require("path");
 const changeAvatar = require("../../controllers/users/changeAvatar");
 const validateUser = require("../../helpers/userJoiValidator");
@@ -30,5 +33,7 @@ router.post("/logout", validateToken, logout);
 router.get("/current", validateToken, current);
 router.patch("/avatars", validateToken, upload.single("avatar"), changeAvatar);
 router.patch("/", validateToken, change);
+router.get("/verify/:verificationToken", verify);
+router.post("/verify", validateEmail, reverify);
 
 module.exports = router;

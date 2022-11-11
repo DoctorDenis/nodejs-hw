@@ -73,4 +73,32 @@ module.exports = class userService {
       return user;
     }
   }
+
+  static async verifyEmail(token) {
+    const user = await userModel.findOneAndUpdate(
+      { verificationToken: token },
+      {
+        $set: { verify: true, verificationToken: null },
+      }
+    );
+    if (!user) {
+      const error = new Error("User not found");
+      error.code = 404;
+      throw error;
+    } else {
+      return user;
+    }
+  }
+
+  static async getuserByEmail(email) {
+    const user = await userModel.findOne({ email });
+
+    if (user.verify) {
+      const error = new Error("Verification has already been passed");
+      error.code = 400;
+      throw error;
+    } else {
+      return user;
+    }
+  }
 };
