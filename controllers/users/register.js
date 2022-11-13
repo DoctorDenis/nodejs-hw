@@ -1,6 +1,9 @@
 const userService = require("../../services/userService");
 const generateToken = require("../../middlewares/generateToken");
 const gravatar = require("gravatar");
+const shortid = require("shortid");
+const sendEmail = require("../../helpers/sendEmail");
+const generateEmailBody = require("../../helpers/generateEmailBody");
 
 async function register(req, res, next) {
   const { body } = req;
@@ -10,6 +13,7 @@ async function register(req, res, next) {
     d: "retro",
     protocol: "http",
   });
+  body.verificationToken = shortid();
 
   try {
     const result = await userService.registerUser(body);
@@ -24,13 +28,13 @@ async function register(req, res, next) {
       },
       token,
     });
+
+    const emailBody = generateEmailBody(result);
+    sendEmail(emailBody);
   } catch (error) {
-    console.log(error);
     if (error.code === 11000) {
       error.code = 409;
       error.message = `Email in use`;
-    } else {
-      error.message = "Cannot register user";
     }
     next(error);
   }
